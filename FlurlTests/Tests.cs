@@ -22,5 +22,19 @@ namespace FlurlTests
                     .Times(1);
             }
         }
+
+        [TestMethod]
+        public void CreateRepository_ShouldHaveBeenCalled_AtLeastOnce()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                var flurlRequestHandler = new FlurlRequestHandler();
+                var result = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test").Result;
+
+                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "user" + "/repos")
+                    .WithVerb(HttpMethod.Post)
+                    .Times(1);
+            }
+        }
     }
 }
