@@ -1,4 +1,5 @@
 using System.Net.Http;
+using Flurl;
 using Flurl.Http.Testing;
 using FlurlExamples;
 using FlurlExamples.Constants;
@@ -17,7 +18,7 @@ namespace FlurlTests
                 var flurlRequestHandler = new FlurlRequestHandler();
                 var result = flurlRequestHandler.GetRepositories().Result;
 
-                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "user" + "/repos")
+                httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "user", "repos"))
                     .WithVerb(HttpMethod.Get)
                     .Times(1);
             }
@@ -31,7 +32,7 @@ namespace FlurlTests
                 var flurlRequestHandler = new FlurlRequestHandler();
                 var result = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test").Result;
 
-                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "user" + "/repos")
+                httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "user", "repos"))
                     .WithVerb(HttpMethod.Post)
                     .Times(1);
             }
@@ -45,7 +46,7 @@ namespace FlurlTests
                 var flurlRequestHandler = new FlurlRequestHandler();
                 var result = flurlRequestHandler.EditRepository("CodeMazeBlog", "Test").Result;
 
-                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "repos/" + "CodeMazeBlog/" + "Test")
+                httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "repos", "CodeMazeBlog", "Test"))
                     .WithVerb(new HttpMethod("PATCH"))
                     .Times(1);
             }
@@ -59,7 +60,7 @@ namespace FlurlTests
                 var flurlRequestHandler = new FlurlRequestHandler();
                 var result = flurlRequestHandler.DeleteRepository("CodeMazeBlog", "Test").Result;
 
-                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "repos/" + "CodeMazeBlog/" + "Test")
+                httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "repos", "CodeMazeBlog", "Test"))
                     .WithVerb(HttpMethod.Delete)
                     .Times(1);
             }
