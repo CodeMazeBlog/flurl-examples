@@ -1,3 +1,5 @@
 /.vs
 /FlurlExamples/obj
 /FlurlExamples/bin
+/FlurlTests/obj
+/FlurlTests/bin
