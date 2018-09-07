@@ -14,9 +14,22 @@ namespace FlurlExamples
 
             var flurlRequestHandler = new FlurlRequestHandler();
 
-            var result = flurlRequestHandler.GetAuthorizations().Result;
+            var repositories = flurlRequestHandler.GetRepositories();
 
-            Console.WriteLine(JsonConvert.SerializeObject(result));
+            foreach (var repository in repositories.Result)
+            {
+                Console.WriteLine("------------------------------------------------------------------------------------------------");
+                Console.WriteLine("Repository:");
+                Console.WriteLine($"Name: {repository.Name}");
+                Console.WriteLine($"Full name: {repository.FullName}");
+                Console.WriteLine($"Description: {repository.Description ?? "None"}");
+                Console.WriteLine($"Url: {repository.Url}");
+                Console.WriteLine($"Private: {repository.Private}");
+                Console.WriteLine();
+            }
+
+            var createRepoResult = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test-Repository").Result;
+            var deleteRepoResult = flurlRequestHandler.DeleteRepository("CodeMazeBlog", "Test-Repository").Result;
 
             Console.ReadKey();
         }
