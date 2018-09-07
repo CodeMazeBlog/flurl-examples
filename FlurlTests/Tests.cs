@@ -36,5 +36,33 @@ namespace FlurlTests
                     .Times(1);
             }
         }
+
+        [TestMethod]
+        public void EditRepository_ShouldHaveBeenCalled_AtLeastOnce()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                var flurlRequestHandler = new FlurlRequestHandler();
+                var result = flurlRequestHandler.EditRepository("CodeMazeBlog", "Test").Result;
+
+                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "repos/" + "CodeMazeBlog/" + "Test")
+                    .WithVerb(new HttpMethod("PATCH"))
+                    .Times(1);
+            }
+        }
+
+        [TestMethod]
+        public void DeleteRepository_ShouldHaveBeenCalled_AtLeastOnce()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                var flurlRequestHandler = new FlurlRequestHandler();
+                var result = flurlRequestHandler.DeleteRepository("CodeMazeBlog", "Test").Result;
+
+                httpTest.ShouldHaveCalled(RequestConstants.BaseUrl + "repos/" + "CodeMazeBlog/" + "Test")
+                    .WithVerb(HttpMethod.Delete)
+                    .Times(1);
+            }
+        }
     }
 }
