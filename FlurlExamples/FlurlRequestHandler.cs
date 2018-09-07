@@ -13,26 +13,31 @@ namespace FlurlExamples
     {
         private static string _githubUsername;
         private static string _githubPassword;
+        private static string _githubToken;
 
         public FlurlRequestHandler()
         {
+            //keeping sensitive information in environment variables
+            //never, ever leave secret information in the code or it might end up in some public repo
             _githubUsername = Environment.GetEnvironmentVariable("GITHUB_USERNAME");
             _githubPassword = Environment.GetEnvironmentVariable("GITHUB_PASS");
+            _githubToken = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
         }
 
-        public async Task<List<Repository>> GetRepositories()
+        public Task<List<Repository>> GetRepositories()
         {
             var url = Url.Combine(RequestConstants.BaseUrl, "/user/repos");
 
-            var result = await url
+            var result = url
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
-                .WithBasicAuth(_githubUsername, _githubPassword)
+                //.WithBasicAuth(_githubUsername, _githubPassword) //alternative way of logging in (basic auth)
+                .WithOAuthBearerToken(_githubToken)
                 .GetJsonAsync<List<Repository>>();
 
             return result;
         }
 
-        public async Task<Repository> CreateRepository(string user, string repository)
+        public Task<Repository> CreateRepository(string user, string repository)
         {
             var url = Url.Combine(RequestConstants.BaseUrl, "/user/repos");
             var repo = new Repository
@@ -43,22 +48,42 @@ namespace FlurlExamples
                 Private = false
             };
 
-            var result = await url
+            var result = url
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
-                .WithBasicAuth(_githubUsername, _githubPassword)
+                .WithOAuthBearerToken(_githubToken)
                 .PostJsonAsync(repo)
                 .ReceiveJson<Repository>();
 
             return result;
         }
 
-        public async Task<HttpResponseMessage> DeleteRepository(string user, string repository)
+        public Task<Repository> EditRepository(string user, string repository)
+        {
+            var url = Url.Combine(RequestConstants.BaseUrl, $"/repos/{user}/{repository}");
+            var repo = new Repository
+            {
+                Name = repository,
+                FullName = $"{user}/{repository}",
+                Description = "Modified repository",
+                Private = false
+            };
+
+            var result = url
+                .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
+                .WithOAuthBearerToken(_githubToken)
+                .PatchJsonAsync(repo)
+                .ReceiveJson<Repository>();
+
+            return result;
+        }
+
+        public Task<HttpResponseMessage> DeleteRepository(string user, string repository)
         {
             var url = Url.Combine(RequestConstants.BaseUrl, $"/repos/{user}/{repository}");
 
-            var result = await url
+            var result = url
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
-                .WithBasicAuth(_githubUsername, _githubPassword)
+                .WithOAuthBearerToken(_githubToken)
                 .DeleteAsync();
 
             return result;
