@@ -26,9 +26,8 @@ namespace FlurlExamples
 
         public Task<List<Repository>> GetRepositories()
         {
-            var url = Url.Combine(RequestConstants.BaseUrl, "/user/repos");
-
-            var result = url
+            var result = RequestConstants.BaseUrl
+                .AppendPathSegments("user", "repos")
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 //.WithBasicAuth(_githubUsername, _githubPassword) //alternative way of logging in (basic auth)
                 .WithOAuthBearerToken(_githubToken)
@@ -39,7 +38,6 @@ namespace FlurlExamples
 
         public Task<Repository> CreateRepository(string user, string repository)
         {
-            var url = Url.Combine(RequestConstants.BaseUrl, "/user/repos");
             var repo = new Repository
             {
                 Name = repository,
@@ -48,7 +46,8 @@ namespace FlurlExamples
                 Private = false
             };
 
-            var result = url
+            var result = RequestConstants.BaseUrl
+                .AppendPathSegments("user", "repos")
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
                 .PostJsonAsync(repo)
@@ -59,7 +58,6 @@ namespace FlurlExamples
 
         public Task<Repository> EditRepository(string user, string repository)
         {
-            var url = Url.Combine(RequestConstants.BaseUrl, $"/repos/{user}/{repository}");
             var repo = new Repository
             {
                 Name = repository,
@@ -68,7 +66,8 @@ namespace FlurlExamples
                 Private = false
             };
 
-            var result = url
+            var result = RequestConstants.BaseUrl
+                .AppendPathSegments("repos", user, repository)
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
                 .PatchJsonAsync(repo)
@@ -79,9 +78,8 @@ namespace FlurlExamples
 
         public Task<HttpResponseMessage> DeleteRepository(string user, string repository)
         {
-            var url = Url.Combine(RequestConstants.BaseUrl, $"/repos/{user}/{repository}");
-
-            var result = url
+            var result = RequestConstants.BaseUrl
+                .AppendPathSegments("repos", user, repository)
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
                 .DeleteAsync();

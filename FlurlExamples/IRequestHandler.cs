@@ -9,6 +9,7 @@ namespace FlurlExamples
     {
         Task<List<Repository>> GetRepositories();
         Task<Repository> CreateRepository(string user, string repository);
+        Task<Repository> EditRepository(string user, string repository);
         Task<HttpResponseMessage> DeleteRepository(string user, string repository);
     }
 }
