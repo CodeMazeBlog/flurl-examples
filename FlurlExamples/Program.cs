@@ -1,4 +1,5 @@
 ﻿using System;
+using Flurl.Http;
 using FlurlExamples.Model;
 
 namespace FlurlExamples
@@ -24,10 +25,25 @@ namespace FlurlExamples
             }
             Console.WriteLine();
 
-            var newRepository = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test-Repository").Result;
-            WriteInColor("Repository created", ConsoleColor.Green);
-            WriteResult(newRepository);
-            Console.WriteLine();
+            try
+            {
+                var newRepository = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test-Repository").Result;
+                WriteInColor("Repository created", ConsoleColor.Green);
+                WriteResult(newRepository);
+                Console.WriteLine();
+            }
+            catch (AggregateException ae)
+            {
+                // in case the repository already exists, handle FlurlHttpException
+                ae.Handle(ex =>
+                {
+                    if (ex is FlurlHttpException)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    return ex is FlurlHttpException;
+                });
+            }
 
             var editedRepository = flurlRequestHandler.EditRepository("CodeMazeBlog", "Test-Repository").Result;
             WriteInColor("Repository edited", ConsoleColor.Green);

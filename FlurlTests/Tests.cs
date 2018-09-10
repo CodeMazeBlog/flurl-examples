@@ -16,7 +16,7 @@ namespace FlurlTests
             using (var httpTest = new HttpTest())
             {
                 var flurlRequestHandler = new FlurlRequestHandler();
-                var result = flurlRequestHandler.GetRepositories().Result;
+                flurlRequestHandler.GetRepositories();
 
                 httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "user", "repos"))
                     .WithVerb(HttpMethod.Get)
@@ -30,7 +30,7 @@ namespace FlurlTests
             using (var httpTest = new HttpTest())
             {
                 var flurlRequestHandler = new FlurlRequestHandler();
-                var result = flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test").Result;
+                flurlRequestHandler.CreateRepository("CodeMazeBlog", "Test");
 
                 httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "user", "repos"))
                     .WithVerb(HttpMethod.Post)
@@ -44,7 +44,7 @@ namespace FlurlTests
             using (var httpTest = new HttpTest())
             {
                 var flurlRequestHandler = new FlurlRequestHandler();
-                var result = flurlRequestHandler.EditRepository("CodeMazeBlog", "Test").Result;
+                flurlRequestHandler.EditRepository("CodeMazeBlog", "Test");
 
                 httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "repos", "CodeMazeBlog", "Test"))
                     .WithVerb(new HttpMethod("PATCH"))
@@ -58,7 +58,7 @@ namespace FlurlTests
             using (var httpTest = new HttpTest())
             {
                 var flurlRequestHandler = new FlurlRequestHandler();
-                var result = flurlRequestHandler.DeleteRepository("CodeMazeBlog", "Test").Result;
+                flurlRequestHandler.DeleteRepository("CodeMazeBlog", "Test");
 
                 httpTest.ShouldHaveCalled(Url.Combine(RequestConstants.BaseUrl, "repos", "CodeMazeBlog", "Test"))
                     .WithVerb(HttpMethod.Delete)
