@@ -39,7 +39,7 @@ namespace FlurlExamples
                 {
                     if (ex is FlurlHttpException)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(ex);
                     }
                     return ex is FlurlHttpException;
                 });
@@ -61,7 +61,7 @@ namespace FlurlExamples
         {
             Console.ForegroundColor = color;
             Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ResetColor();
         }
 
         private static void WriteResult(Repository repository)

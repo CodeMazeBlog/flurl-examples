@@ -24,9 +24,9 @@ namespace FlurlExamples
             _githubToken = Environment.GetEnvironmentVariable("GITHUB_TOKEN");
         }
 
-        public Task<List<Repository>> GetRepositories()
+        public async Task<List<Repository>> GetRepositories()
         {
-            var result = RequestConstants.BaseUrl
+            var result = await RequestConstants.BaseUrl
                 .AppendPathSegments("user", "repos")
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 //.WithBasicAuth(_githubUsername, _githubPassword) //alternative way of logging in (basic auth)
@@ -36,7 +36,7 @@ namespace FlurlExamples
             return result;
         }
 
-        public Task<Repository> CreateRepository(string user, string repository)
+        public async Task<Repository> CreateRepository(string user, string repository)
         {
             var repo = new Repository
             {
@@ -46,7 +46,7 @@ namespace FlurlExamples
                 Private = false
             };
 
-            var result = RequestConstants.BaseUrl
+            var result = await RequestConstants.BaseUrl
                 .AppendPathSegments("user", "repos")
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
@@ -56,7 +56,7 @@ namespace FlurlExamples
             return result;
         }
 
-        public Task<Repository> EditRepository(string user, string repository)
+        public async Task<Repository> EditRepository(string user, string repository)
         {
             var repo = new Repository
             {
@@ -66,7 +66,7 @@ namespace FlurlExamples
                 Private = false
             };
 
-            var result = RequestConstants.BaseUrl
+            var result = await RequestConstants.BaseUrl
                 .AppendPathSegments("repos", user, repository)
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
@@ -76,9 +76,9 @@ namespace FlurlExamples
             return result;
         }
 
-        public Task<HttpResponseMessage> DeleteRepository(string user, string repository)
+        public async Task<HttpResponseMessage> DeleteRepository(string user, string repository)
         {
-            var result = RequestConstants.BaseUrl
+            var result = await RequestConstants.BaseUrl
                 .AppendPathSegments("repos", user, repository)
                 .WithHeader(RequestConstants.UserAgent, RequestConstants.UserAgentValue)
                 .WithOAuthBearerToken(_githubToken)
